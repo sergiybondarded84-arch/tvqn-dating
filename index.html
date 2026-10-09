@@ -3,127 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TVQN Dating Platform</title>
+  <title>TVQN Dating — Платформа знайомств</title>
   <style>
     * { box-sizing: border-box; }
     body {
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
       background: #121212;
       color: #ffffff;
       margin: 0;
-      padding: 20px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
     }
+    h1 { color: #f3ba2f; margin-bottom: 5px; font-size: 24px; text-align: center; }
+    p.sub { color: #aaa; margin-top: 0; font-size: 14px; text-align: center; }
+    
     .card {
       background: #1e1e1e;
       border-radius: 16px;
-      padding: 20px;
+      padding: 15px;
+      width: 100%;
       max-width: 360px;
-      width: 100%;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
       text-align: center;
-      border: 1px solid #2a2a2a;
+      margin-bottom: 15px;
     }
-    h1 { color: #f3ba2f; margin-bottom: 6px; font-size: 24px; }
-    p { color: #aaa; font-size: 13px; margin-top: 0; }
-    .profile-card {
-      background: #262626;
-      border-radius: 12px;
-      padding: 12px;
-      margin: 15px 0;
-      border: 1px solid #333;
-    }
-    .avatar-img {
+    .card img {
       width: 100%;
-      height: 250px;
+      height: 320px;
       object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      background: #333;
+      border-radius: 12px;
     }
-    .btn {
-      background: #f3ba2f;
-      color: #000;
-      border: none;
-      padding: 14px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 10px;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 10px;
-    }
-    .btn-secondary {
-      background: #333;
-      color: #fff;
-    }
+    .profile-info { margin: 15px 0 10px; }
+    .profile-name { font-size: 20px; font-weight: bold; }
+    .profile-city { font-size: 14px; color: #888; margin-top: 4px; }
+    
     .stats {
       display: flex;
       justify-content: space-around;
       background: #2a2a2a;
-      border-radius: 10px;
       padding: 10px;
-      margin-top: 10px;
+      border-radius: 10px;
+      margin-bottom: 15px;
     }
-    .stat-val { color: #f3ba2f; font-weight: bold; font-size: 18px; }
-    .stat-lbl { color: #888; font-size: 12px; }
+    .stat-val { font-weight: bold; color: #f3ba2f; }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .btn-like { background: #f3ba2f; color: #000; }
+    .btn-next { background: #333; color: #fff; }
+    .btn-add { background: #28a745; color: #fff; margin-top: 15px; }
+
+    /* Форма створення анкети */
+    .form-container {
+      display: none;
+      background: #1e1e1e;
+      padding: 15px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 360px;
+      margin-bottom: 20px;
+    }
+    .form-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #2a2a2a;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>TVQN Dating</h1>
-    <p>Платформа знайомств майбутнього</p>
+  <h1>TVQN Dating</h1>
+  <p class="sub">Платформа знайомств майбутнього</p>
 
-    <div class="profile-card">
-      <img id="user-photo" class="avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500" alt="Аватар">
-      <h3 id="user-name" style="margin: 5px 0;">Анна, 24</h3>
-      <p id="user-city">Київ • Шукає спілкування</p>
+  <div class="card">
+    <img id="user-photo" src="" alt="Photo">
+    <div class="profile-info">
+      <div class="profile-name" id="user-name"></div>
+      <div class="profile-city" id="user-city"></div>
     </div>
 
     <div class="stats">
       <div>
-        <div class="stat-val" id="likes-count">12</div>
-        <div class="stat-lbl">Вподобання</div>
+        <div class="stat-val" id="likes-count">0</div>
+        <div style="font-size:11px; color:#aaa;">Вподобання</div>
       </div>
       <div>
-        <div class="stat-val" id="bal-count">500</div>
-        <div class="stat-lbl">TVQN Монет</div>
+        <div class="stat-val" id="bal-count">0</div>
+        <div style="font-size:11px; color:#aaa;">TVQN Монет</div>
       </div>
     </div>
 
-    <button id="like-btn" class="btn" onclick="likeProfile()">Вподобати профіль ❤️</button>
-    <button id="next-btn" class="btn btn-secondary" onclick="nextProfile()">Наступна анкета ➡️</button>
+    <button class="btn btn-like" onclick="likeProfile()">Вподобати профіль ❤️</button>
+    <button class="btn btn-next" onclick="nextProfile()">Наступна анкета ➡️</button>
+    <button class="btn btn-add" onclick="toggleForm()">+ Додати свою анкету</button>
+  </div>
+
+  <div class="form-container" id="add-form">
+    <h3 style="margin-top:0; color:#f3ba2f; text-align:center;">Створити анкету</h3>
+    <input type="text" id="input-name" placeholder="Ім'я та вік (напр. Олена, 23)">
+    <input type="text" id="input-city" placeholder="Місто та інтереси (напр. Київ • Crypto)">
+    <input type="text" id="input-photo" placeholder="Посилання на фото (URL)">
+    <button class="btn btn-like" style="margin-top:10px;" onclick="addNewProfile()">Опублікувати анкету</button>
   </div>
 
   <script>
-    const profiles = [
-      { name: "Анна, 24", city: "Київ • Шукає спілкування", photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500" },
-      { name: "Олена, 22", city: "Львів • Подорожі та крипта", photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500" },
-      { name: "Марія, 25", city: "Одеса • Web3 ентузіаст", photo: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500" }
+    let profiles = [
+      { name: "Марія, 25", city: "Одеса • Web3 ентузіаст", photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500" },
+      { name: "Анна, 22", city: "Київ • Дизайнер", photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500" },
+      { name: "Софія, 24", city: "Львів • Crypto Trader", photo: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500" }
     ];
+
     let current = 0;
     let likes = 12;
     let balance = 500;
 
-    function nextProfile() {
-      current = (current + 1) % profiles.length;
+    function renderProfile() {
       document.getElementById('user-name').textContent = profiles[current].name;
       document.getElementById('user-city').textContent = profiles[current].city;
       document.getElementById('user-photo').src = profiles[current].photo;
+      document.getElementById('likes-count').textContent = likes;
+      document.getElementById('bal-count').textContent = balance;
+    }
+
+    function nextProfile() {
+      current = (current + 1) % profiles.length;
+      renderProfile();
     }
 
     function likeProfile() {
       likes++;
       balance += 50;
-      document.getElementById('likes-count').textContent = likes;
-      document.getElementById('bal-count').textContent = balance;
       nextProfile();
     }
-  </script>
 
+    function toggleForm() {
+      let f = document.getElementById('add-form');
+      f.style.display = f.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function addNewProfile() {
+      let name = document.getElementById('input-name').value;
+      let city = document.getElementById('input-city').value;
+      let photo = document.getElementById('input-photo').value;
+
+      if (!name || !photo) {
+        alert("Будь ласка, заповніть ім'я та посилання на фото!");
+        return;
+      }
+
+      profiles.push({ name: name, city: city || "Україна", photo: photo });
+      alert("Анкету успішно додано! Вона з'явилася в стрічці.");
+      
+      document.getElementById('input-name').value = '';
+      document.getElementById('input-city').value = '';
+      document.getElementById('input-photo').value = '';
+      toggleForm();
+      
+      current = profiles.length - 1;
+      renderProfile();
+    }
+
+    renderProfile();
+  </script>
 </body>
 </html>
